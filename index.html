@@ -38,7 +38,7 @@
     width: 838px;
     background: linear-gradient(155deg, #e4e4e2 0%, #b9b9b6 45%, #d6d6d4 100%);
     border-radius: 36px;
-    padding: 1.5px;
+    padding: 0.5px;
     box-shadow:
       0 60px 120px -30px rgba(0,0,0,0.65),
       0 0 0 1px rgba(255,255,255,0.4) inset;
@@ -322,10 +322,11 @@
     if (!reduced) {
       var now = performance.now();
       // gentle autonomous drift so the characters feel alive even when no
-      // real mouse ever crosses the mockup (portfolio embeds, static views)
-      var idleX = Math.sin(now * 0.00055) * 6 + Math.sin(now * 0.0012 + 1.7) * 3;
-      var idleY = Math.cos(now * 0.00038 + 0.9) * 4;
-      var idleSkew = Math.sin(now * 0.00042 + 2.1) * 2;
+      // real mouse ever crosses the mockup (portfolio embeds, static views) —
+      // always blended in, so it never freezes to a static default look
+      var idleX = Math.sin(now * 0.00055) * 7 + Math.sin(now * 0.0012 + 1.7) * 3.5;
+      var idleY = Math.cos(now * 0.00038 + 0.9) * 5;
+      var idleSkew = Math.sin(now * 0.00042 + 2.1) * 2.5;
 
       var mx = 0, my = 0, mskew = 0;
       if (mouseActive) {
@@ -350,7 +351,7 @@
         purpleEyes.style.left = (38 * SCALE + fx) + 'px'; purpleEyes.style.top = (36 * SCALE + fy) + 'px';
         purple.style.transform = 'skewX(' + skew + 'deg)';
         blackEyes.style.left = (22 * SCALE + fx) + 'px'; blackEyes.style.top = (28 * SCALE + fy) + 'px';
-        black.style.transform = 'skewX(' + (skew * 1.5) + 'deg)';
+        black.style.transform = 'skewX(' + skew + 'deg)';
       }
       cream.style.transform = 'skewX(' + skew + 'deg)';
       creamDots.style.left = (72 * SCALE + fx) + 'px'; creamDots.style.top = (78 * SCALE + fy) + 'px';
