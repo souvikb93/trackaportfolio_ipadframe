@@ -38,7 +38,7 @@
     width: 838px;
     background: linear-gradient(155deg, #e4e4e2 0%, #b9b9b6 45%, #d6d6d4 100%);
     border-radius: 36px;
-    padding: 0.5px;
+    padding: 1px;
     box-shadow:
       0 60px 120px -30px rgba(0,0,0,0.65),
       0 0 0 1px rgba(255,255,255,0.4) inset;
@@ -342,20 +342,27 @@
       var fy = clamp(my + idleY, -10, 10) * SCALE;
       var skew = clamp(mskew + idleSkew, -6, 6);
 
+      // whole-body translate — same px amount for all 4 regardless of their
+      // own height, so response is equal (skewX alone shifts taller bodies
+      // more than short ones, which read as "uneven")
+      var bodyX = fx * 0.55;
+      var bodyY = fy * 0.45;
+      var bodyT = 'translate(' + bodyX + 'px,' + bodyY + 'px) ';
+
       if (isTyping) {
         purpleEyes.style.left = px(48); purpleEyes.style.top = px(58);
-        purple.style.transform = 'skewX(' + (skew - 12) + 'deg) translateX(' + (36 * SCALE) + 'px)';
+        purple.style.transform = bodyT + 'skewX(' + (skew - 12) + 'deg) translateX(' + (36 * SCALE) + 'px)';
         blackEyes.style.left = px(28); blackEyes.style.top = px(10);
-        black.style.transform = 'skewX(' + (skew * 1.5 + 10) + 'deg) translateX(' + (18 * SCALE) + 'px)';
+        black.style.transform = bodyT + 'skewX(' + (skew * 1.5 + 10) + 'deg) translateX(' + (18 * SCALE) + 'px)';
       } else {
         purpleEyes.style.left = (38 * SCALE + fx) + 'px'; purpleEyes.style.top = (36 * SCALE + fy) + 'px';
-        purple.style.transform = 'skewX(' + skew + 'deg)';
+        purple.style.transform = bodyT + 'skewX(' + skew + 'deg)';
         blackEyes.style.left = (22 * SCALE + fx) + 'px'; blackEyes.style.top = (28 * SCALE + fy) + 'px';
-        black.style.transform = 'skewX(' + skew + 'deg)';
+        black.style.transform = bodyT + 'skewX(' + skew + 'deg)';
       }
-      cream.style.transform = 'skewX(' + skew + 'deg)';
+      cream.style.transform = bodyT + 'skewX(' + skew + 'deg)';
       creamDots.style.left = (72 * SCALE + fx) + 'px'; creamDots.style.top = (78 * SCALE + fy) + 'px';
-      gray.style.transform = 'skewX(' + skew + 'deg)';
+      gray.style.transform = bodyT + 'skewX(' + skew + 'deg)';
       grayDots.style.left = (46 * SCALE + fx) + 'px'; grayDots.style.top = (36 * SCALE + fy) + 'px';
       mouth.style.left = (35 * SCALE + fx) + 'px'; mouth.style.top = (80 * SCALE + fy) + 'px';
     }
