@@ -9,21 +9,19 @@
     --line-strong: rgba(255,255,255,0.16);
   }
   * { box-sizing: border-box; }
-  body { background: #0a0a0a; }
+  html, body { background: transparent; margin: 0; height: 100%; }
   .stage-wrap {
-    max-width: 100%;
-    overflow-x: auto;
-    background: #0a0a0a;
-    padding: 60px;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
-  /* Fixed 512x394 export frame — device is built at 838px native width,
-     scaled down uniformly so nothing is hand-recalculated or distorted. */
+  /* Fills whatever box it's placed in (Framer embed frame), keeps the
+     512:394 shape, scales down/up as that box is resized — no fixed cap. */
   .frame-512 {
     width: 100%;
-    max-width: 512px;
-    aspect-ratio: 512 / 394;
+    height: 100%;
     overflow: hidden;
     position: relative;
   }
@@ -369,9 +367,15 @@
   // resizing the embed frame), instead of a fixed 0.611 transform. ──
   var frameEl = document.querySelector('.frame-512');
   var shellEl = document.querySelector('.device-shell');
+  var naturalW = shellEl.offsetWidth;
+  var naturalH = shellEl.offsetHeight;
   function applyScale() {
-    var w = frameEl.getBoundingClientRect().width;
-    if (w > 0) shellEl.style.transform = 'scale(' + (w / 838) + ')';
+    var rect = frameEl.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    var scale = Math.min(rect.width / naturalW, rect.height / naturalH);
+    shellEl.style.transform = 'scale(' + scale + ')';
+    shellEl.style.left = ((rect.width - naturalW * scale) / 2) + 'px';
+    shellEl.style.top = ((rect.height - naturalH * scale) / 2) + 'px';
   }
   if (window.ResizeObserver) {
     new ResizeObserver(applyScale).observe(frameEl);
